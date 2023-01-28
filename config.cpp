@@ -4,7 +4,7 @@ class CfgPatches
 {
 	class DayZ_Expansion_AI_Armbands_scripts
 	{
-		requiredAddons[] = {"DZ_Scripts","DayZExpansion_AI_Scripts"};
+		requiredAddons[] = {"DayZExpansion_AI_Scripts"};
 	};
 };
 class CfgMods
@@ -21,23 +21,18 @@ class CfgMods
 		version = "0.1";
 		extra = 0;
 		type = "servermod";
-		dependencies[] = {"Game","World","Mission"};
+		dependencies[] = {"Game","Mission"};
 		class defs
 		{
 			class gameScriptModule
 			{
 				value = "";
-				files[] = {"DayZExpansion/AI/Scripts/Common","DayZExpansion/AI/Scripts/3_Game","dolphin/DayZ-Expansion-AI-Armbands/Game"};
-			};
-			class worldScriptModule
-			{
-				value = "";
-				files[] = {"DayZExpansion/AI/Scripts/Common","DayZExpansion/AI/Scripts/4_World","dolphin/DayZ-Expansion-AI-Armbands/World"};
+				files[] = {"dolphin/DayZ-Expansion-AI-Armbands/Scripts/3_Game"};
 			};
 			class missionScriptModule
 			{
 				value = "";
-				files[] = {"DayZExpansion/AI/Scripts/Common","DayZExpansion/AI/Scripts/5_Mission","dolphin/DayZ-Expansion-AI-Armbands/Mission"};
+				files[] = {"dolphin/DayZ-Expansion-AI-Armbands/Scripts/5_Mission"};
 			};
 		};
 	};
