@@ -1,3 +1,4 @@
+[eAIRegisterFaction(eAIFactionPlayer)]
 class eAIFactionPlayer : eAIFaction
 {
 	void eAIFactionPlayer()

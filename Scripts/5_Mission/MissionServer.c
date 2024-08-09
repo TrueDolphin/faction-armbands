@@ -1,5 +1,5 @@
 //name:TrueDolphin
-//date:13/10/2022
+//date:8/8/2024
 //Faction changes with armbands on respawn/load-in
 //testing, contains ingame message function.
 
@@ -16,6 +16,7 @@ modded class MissionServer {
     //! que call
     Print("Factions Based on Armbands Enabled");
     loadArmbandGroups();
+    Print("Default faction Set to " + m_ArmbandGroups.Default_Faction);
     GetGame().GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(this.OnlinePlayerCheck, timer, true);
   }
 
@@ -41,13 +42,13 @@ protected void FactionArmbandCheck(PlayerBase player) {
     eAIFaction faction = playerGroup.GetFaction();
     Armband_ColorBase currentArmband = Armband_ColorBase.Cast(player.FindAttachmentBySlotName("Armband"));
     if (!currentArmband) { 
-      if (faction.GetName() == "Player")
+      if (faction.GetName() == m_ArmbandGroups.Default_Faction)
         return;
-      playerGroup.SetFaction(new eAIFactionPlayer());
-      if (m_ArmbandGroups.Faction_Change == 1) sendPlayerArmbandMessage(player, "Faction Set to Player");
+      playerGroup.SetFaction(eAIFaction.Create(m_ArmbandGroups.Default_Faction));
+      if (m_ArmbandGroups.Faction_Change == 1) sendPlayerArmbandMessage(player, "Faction Set to " + m_ArmbandGroups.Default_Faction);
       #ifdef EXPANSIONTRACE
       Print("Armband Removed"); //! script log message to host
-      Print(player.GetIdentity().GetName() + " has been assigned to faction: player");
+      Print(player.GetIdentity().GetName() + " has been assigned to faction: " + m_ArmbandGroups.Default_Faction);
       #endif
       return;
     }
@@ -87,8 +88,10 @@ protected void FactionArmbandCheck(PlayerBase player) {
       LoggerPrint("Loading config (" + ArmBand_Settings + ")");
     }
 
-   if (m_ArmbandGroups.Version != 2) {
-      LoggerPrint("Settings file out of date. delete and restart.");
+   if (m_ArmbandGroups.Version != 3) {
+      m_ArmbandGroups.Default_Faction = "Player";
+      m_ArmbandGroups.Version = 3;
+      JsonFileLoader < ArmbandGroups > .JsonSaveFile(ArmBand_Settings, m_ArmbandGroups);
    }
     if (m_ArmbandGroups.Faction_Change != 1 && m_ArmbandGroups.Faction_Change != 0){
       LoggerPrint("Faction_change value incorrect. setting default off.");
@@ -200,8 +203,9 @@ class ArmbandGroup{
 }
 
 class ArmbandGroups {
-  int Version = 2; // default version
+  int Version = 3; // default version
   int Faction_Change = 0;
+  string Default_Faction = "Player";
   ref array < ref ArmbandGroup > Group;
   void ArmbandGroups() {
     Group = new array < ref ArmbandGroup > ;
